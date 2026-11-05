@@ -251,11 +251,6 @@ def push_to_github(root: Path, repo_name: str, token: str, commit_message: str) 
         {"tree": tree_items},
     )
 
-    iso_now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    actor_name = user_info.get("name") or owner
-    actor_email = user_info.get("email") or f"{user_info.get('id', 0)}+{owner}@users.noreply.github.com"
-    actor_identity = {"name": actor_name, "email": actor_email, "date": iso_now}
-
     commit_res = github_api_request(
         "POST",
         f"https://api.github.com/repos/{owner}/{repo_name}/git/commits",
@@ -264,8 +259,6 @@ def push_to_github(root: Path, repo_name: str, token: str, commit_message: str) 
             "message": commit_message,
             "tree": tree_res["sha"],
             "parents": parent_shas,
-            "author": actor_identity,
-            "committer": actor_identity,
         },
     )
 
