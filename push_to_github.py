@@ -32,6 +32,7 @@ from pathlib import Path
 
 IGNORE_DIRS = {
     ".git",
+    ".agents",
     ".venv",
     "venv",
     "ENV",
