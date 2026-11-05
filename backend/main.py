@@ -1,3 +1,4 @@
+
 """
 DhwaniDrishti FastAPI Backend Server (Phase 3)
 ==============================================
@@ -155,8 +156,8 @@ async def evaluate_stem_practice(payload: StemCoachEvaluateRequest) -> dict:
     )
 
 
-@app.api_route("/api/index.py", methods=["GET", "POST"])
-@app.api_route("/api/index", methods=["GET", "POST"])
+@app.api_route("/api/index.py", methods=["GET", "POST"], include_in_schema=False)
+@app.api_route("/api/index", methods=["GET", "POST"], include_in_schema=False)
 async def vercel_legacy_rewrite_dispatch(request: Request) -> dict:
     """
     Fallback dispatcher if a reverse proxy or legacy Vercel rewrite forwards
