@@ -85,6 +85,7 @@ class StemCoachEvaluateRequest(BaseModel):
 # ---------------------------------------------------------------------------
 
 @app.get("/api/health")
+@app.get("/health")
 async def health_check() -> dict:
     """Returns backend health and active NLP parser model status."""
     return {
@@ -97,6 +98,7 @@ async def health_check() -> dict:
 
 
 @app.post("/api/lecturecast/parse")
+@app.post("/lecturecast/parse")
 async def parse_lecture_speech(payload: LectureCastParseRequest) -> dict:
     """
     Pillar 1 (LectureCast): Converts spoken S-V-O transcript (English/Telugu/Hindi)
@@ -109,6 +111,7 @@ async def parse_lecture_speech(payload: LectureCastParseRequest) -> dict:
 
 
 @app.post("/api/doubtdesk/classify")
+@app.post("/doubtdesk/classify")
 async def classify_student_doubt(payload: DoubtDeskClassifyRequest) -> dict:
     """
     Pillar 2 (DoubtDesk): Evaluates a multi-frame time-series sequence of MediaPipe
@@ -125,6 +128,7 @@ async def classify_student_doubt(payload: DoubtDeskClassifyRequest) -> dict:
 
 
 @app.get("/api/stem-coach/terms")
+@app.get("/stem-coach/terms")
 async def get_stem_terms() -> dict:
     """
     Pillar 3 (ISL-STEM Coach): Lists available STEM concepts, canonical ISL signing
@@ -134,6 +138,7 @@ async def get_stem_terms() -> dict:
 
 
 @app.post("/api/stem-coach/evaluate")
+@app.post("/stem-coach/evaluate")
 async def evaluate_stem_practice(payload: StemCoachEvaluateRequest) -> dict:
     """
     Pillar 3 (ISL-STEM Coach): Runs Dynamic Time Warping (DTW) and Vector Cosine Distance
@@ -174,6 +179,12 @@ async def serve_index():
 
 
 if FRONTEND_DIR.exists():
+    css_dir = FRONTEND_DIR / "css"
+    js_dir = FRONTEND_DIR / "js"
+    if css_dir.exists():
+        app.mount("/css", StaticFiles(directory=str(css_dir)), name="css")
+    if js_dir.exists():
+        app.mount("/js", StaticFiles(directory=str(js_dir)), name="js")
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
     app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
 

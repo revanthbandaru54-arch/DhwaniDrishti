@@ -1,12 +1,13 @@
 {
   "name": "dhwanidrishti",
   "version": "2.4.0",
+  "type": "module",
   "description": "DhwaniDrishti — Real-time Bi-Directional Indian Sign Language (ISL) Translation & STEM Coach (NEP 2020)",
   "main": "frontend/js/app.js",
   "scripts": {
     "start": "python3 run_app.py || python run_app.py || \".venv\\Scripts\\python.exe\" run_app.py",
     "dev": "python3 -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload || \".venv\\Scripts\\python.exe\" -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload",
-    "build": "python3 build_exe.py || python build_exe.py || \".venv\\Scripts\\python.exe\" build_exe.py",
+    "build": "\".venv\\Scripts\\python.exe\" build_exe.py || python3 build_exe.py || python build_exe.py || node -e \"const fs=require('fs');fs.cpSync('frontend','dist',{recursive:true});\"",
     "build:exe": "\".venv\\Scripts\\python.exe\" build_exe.py || python build_exe.py",
     "test": "python3 -m unittest discover -s tests -v || \".venv\\Scripts\\python.exe\" -m unittest discover -s tests -v",
     "github:push": "\".venv\\Scripts\\python.exe\" push_to_github.py --repo DhwaniDrishti || python push_to_github.py --repo DhwaniDrishti"
