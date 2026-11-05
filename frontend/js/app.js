@@ -238,18 +238,47 @@ class DhwaniDrishtiApp {
             });
         }
 
+        const btnMirror = document.getElementById("btn-mirror-webcam");
+        if (btnMirror) {
+            btnMirror.addEventListener("click", () => {
+                if (!this.visionPipeline) return;
+                const mirrored = this.visionPipeline.toggleMirror();
+                btnMirror.classList.toggle("active", mirrored);
+            });
+        }
+
+        const btnOverlayCam = document.getElementById("btn-overlay-enable-camera");
+        if (btnOverlayCam) {
+            btnOverlayCam.addEventListener("click", async () => {
+                await this.toggleCameraEnabled(true);
+            });
+        }
+
+        const startSimulatorView = () => {
+            this.cameraEnabled = false;
+            if (this.liveWebcamEvalTimer) {
+                clearInterval(this.liveWebcamEvalTimer);
+                this.liveWebcamEvalTimer = null;
+            }
+            this._syncCameraHeaderUI(false);
+            const disabledOverlay = document.getElementById("camera-disabled-overlay");
+            if (disabledOverlay) disabledOverlay.classList.add("hidden-pillar");
+            const statusPill = document.getElementById("canvas-status-pill");
+            if (statusPill) statusPill.textContent = "Simulator Active";
+            const res = this.visionPipeline.startSimulation(this.selectedStemTerm);
+            this._updateVisionModeBadge(res.status);
+            if (btnWebcam) btnWebcam.textContent = "Use Live Webcam";
+            this.runStemCoachEvaluation();
+        };
+
         const btnSim = document.getElementById("btn-start-sim");
         if (btnSim) {
-            btnSim.addEventListener("click", () => {
-                this.cameraEnabled = false;
-                this._syncCameraHeaderUI(false);
-                const disabledOverlay = document.getElementById("camera-disabled-overlay");
-                if (disabledOverlay) disabledOverlay.classList.add("hidden-pillar");
-                const res = this.visionPipeline.startSimulation(this.selectedStemTerm);
-                this._updateVisionModeBadge(res.status);
-                if (btnWebcam) btnWebcam.textContent = "Use Live Webcam";
-                this.runStemCoachEvaluation();
-            });
+            btnSim.addEventListener("click", startSimulatorView);
+        }
+
+        const btnOverlaySim = document.getElementById("btn-overlay-resume-sim");
+        if (btnOverlaySim) {
+            btnOverlaySim.addEventListener("click", startSimulatorView);
         }
 
         // DoubtDesk Sequence Classification & Speech Synthesis controls
@@ -311,13 +340,10 @@ class DhwaniDrishtiApp {
         if (dockCamera) {
             dockCamera.addEventListener("click", async () => {
                 if (!this.visionPipeline) return;
-                if (!this.cameraEnabled) await this.toggleCameraEnabled(true);
-                if (this.visionPipeline.isSimulationMode) {
-                    const res = await this.visionPipeline.startWebcam();
-                    this._updateVisionModeBadge(res.status);
+                if (this.visionPipeline.isSimulationMode || !this.cameraEnabled) {
+                    await this.toggleCameraEnabled(true);
                 } else {
-                    const res = this.visionPipeline.startSimulation(this.selectedStemTerm);
-                    this._updateVisionModeBadge(res.status);
+                    startSimulatorView();
                 }
             });
         }
@@ -391,29 +417,52 @@ class DhwaniDrishtiApp {
     async toggleCameraEnabled(forceState = null) {
         const targetState = forceState !== null ? forceState : !this.cameraEnabled;
         const disabledOverlay = document.getElementById("camera-disabled-overlay");
+        const overlayMsg = document.getElementById("camera-overlay-message");
         const statusPill = document.getElementById("canvas-status-pill");
+
+        if (this.liveWebcamEvalTimer) {
+            clearInterval(this.liveWebcamEvalTimer);
+            this.liveWebcamEvalTimer = null;
+        }
 
         if (targetState) {
             if (!this.visionPipeline) return;
+            if (disabledOverlay) disabledOverlay.classList.add("hidden-pillar");
+            if (statusPill) statusPill.textContent = "Connecting Camera...";
             this._updateVisionModeBadge("Requesting device camera access...");
             const res = await this.visionPipeline.startWebcam();
             if (res.mode === "webcam") {
                 this.cameraEnabled = true;
                 this._syncCameraHeaderUI(true);
                 if (disabledOverlay) disabledOverlay.classList.add("hidden-pillar");
-                if (statusPill) statusPill.textContent = "Webcam Active";
+                if (statusPill) statusPill.textContent = "Live Webcam Active";
                 this._updateVisionModeBadge(res.status);
+                // Continuously evaluate live camera signing trajectory every 1.2s
+                this.liveWebcamEvalTimer = setInterval(() => {
+                    if (this.cameraEnabled && this.visionPipeline && !this.visionPipeline.isPaused) {
+                        this.runStemCoachEvaluation();
+                    }
+                }, 1200);
             } else {
                 this.cameraEnabled = false;
                 this._syncCameraHeaderUI(false);
+                if (statusPill) statusPill.textContent = "Camera Unavailable";
                 this._updateVisionModeBadge(res.status || "Camera access unavailable");
-                alert("Could not access the device camera. Please allow camera permissions in your browser settings.");
+                if (overlayMsg) {
+                    overlayMsg.textContent =
+                        res.status ||
+                        "Could not access device camera. Allow camera permission in browser settings or use the 543-landmark simulator.";
+                }
+                if (disabledOverlay) disabledOverlay.classList.remove("hidden-pillar");
             }
         } else {
             this.cameraEnabled = false;
             this._syncCameraHeaderUI(false);
             if (this.visionPipeline) {
                 this.visionPipeline.stop();
+            }
+            if (overlayMsg) {
+                overlayMsg.textContent = "Camera Disabled — Click below to enable live camera or resume the 543-landmark simulator.";
             }
             if (disabledOverlay) disabledOverlay.classList.remove("hidden-pillar");
             if (statusPill) statusPill.textContent = "Camera Off";

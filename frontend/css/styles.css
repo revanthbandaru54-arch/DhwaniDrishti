@@ -590,7 +590,40 @@ body {
     font-weight: 600;
 }
 
-#holistic-canvas,
+.camera-bar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.webcam-video-layer {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+    z-index: 1;
+    background-color: #0f172a;
+}
+
+.webcam-video-layer.mirrored {
+    transform: scaleX(-1);
+}
+
+.webcam-video-layer.hidden-video {
+    display: none !important;
+}
+
+#holistic-canvas {
+    position: relative;
+    z-index: 5;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+}
+
 #avatar-viewport canvas {
     width: 100% !important;
     height: 100% !important;
@@ -604,8 +637,11 @@ body {
     z-index: 15;
     background-color: var(--bg-muted);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 16px;
+    text-align: center;
     color: var(--text-secondary);
     font-size: var(--text-base);
     font-weight: 500;

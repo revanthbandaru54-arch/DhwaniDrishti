@@ -20,7 +20,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <!-- MediaPipe Holistic WebAssembly for 543-Landmark Tracking -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic@0.5.1675471629/holistic.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- ================================================================== -->
@@ -179,13 +179,20 @@
                 <div class="viewport-frame">
                     <div class="viewport-label-bar">
                         <span>Student Camera</span>
-                        <span id="canvas-status-pill">Active</span>
+                        <div class="camera-bar-actions">
+                            <button type="button" id="btn-mirror-webcam" class="persona-btn active" title="Mirror live camera horizontally">Mirror</button>
+                            <span id="canvas-status-pill">Simulator Active</span>
+                        </div>
                     </div>
-                    <div class="viewport-box">
-                        <video id="webcam-video" playsinline muted style="display: none;"></video>
+                    <div class="viewport-box" id="student-camera-box">
+                        <video id="webcam-video" class="webcam-video-layer hidden-video" autoplay playsinline muted></video>
                         <canvas id="holistic-canvas" width="640" height="480" aria-label="Student sign tracking canvas"></canvas>
                         <div id="camera-disabled-overlay" class="camera-disabled-overlay hidden-pillar">
-                            <span>Camera Disabled</span>
+                            <p id="camera-overlay-message">Camera Disabled</p>
+                            <div class="control-row" style="justify-content: center; margin-top: 10px;">
+                                <button type="button" id="btn-overlay-enable-camera" class="btn-primary">Enable Live Camera</button>
+                                <button type="button" id="btn-overlay-resume-sim">Use 543-Landmark Simulator</button>
+                            </div>
                         </div>
                     </div>
                 </div>
