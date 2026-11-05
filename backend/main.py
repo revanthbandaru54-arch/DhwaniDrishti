@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 from typing import List, Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -153,6 +153,28 @@ async def evaluate_stem_practice(payload: StemCoachEvaluateRequest) -> dict:
         measured_palm_angle_deg=payload.measured_palm_angle_deg,
         measured_eyebrow_raise=payload.measured_eyebrow_raise,
     )
+
+
+@app.api_route("/api/index.py", methods=["GET", "POST"])
+@app.api_route("/api/index", methods=["GET", "POST"])
+async def vercel_legacy_rewrite_dispatch(request: Request) -> dict:
+    """
+    Fallback dispatcher if a reverse proxy or legacy Vercel rewrite forwards
+    /api/* requests to /api/index.py instead of preserving the original path.
+    """
+    if request.method == "GET":
+        if "terms" in str(request.query_params):
+            return await get_stem_terms()
+        return await health_check()
+
+    body = await request.json()
+    if "text" in body:
+        return await parse_lecture_speech(LectureCastParseRequest(**body))
+    if "sequence" in body:
+        return await classify_student_doubt(DoubtDeskClassifyRequest(**body))
+    if "student_sequence" in body:
+        return await evaluate_stem_practice(StemCoachEvaluateRequest(**body))
+    return await health_check()
 
 
 # ---------------------------------------------------------------------------
