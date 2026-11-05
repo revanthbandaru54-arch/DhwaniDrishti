@@ -170,21 +170,34 @@ FRONTEND_DIR = _resolve_frontend_dir()
 
 
 @app.get("/")
+@app.get("/index.html")
 async def serve_index():
     """Serves the DhwaniDrishti Single-Page Application."""
     index_file = FRONTEND_DIR / "index.html"
     if index_file.exists():
-        return FileResponse(str(index_file))
+        return FileResponse(str(index_file), media_type="text/html")
     return {"message": "DhwaniDrishti API is running. Visit /docs for OpenAPI documentation."}
 
 
+@app.get("/css/{file_path:path}")
+async def serve_css(file_path: str):
+    """Serves CSS stylesheets directly for FastAPI serverless deployments."""
+    target = (FRONTEND_DIR / "css" / file_path).resolve()
+    if target.is_file() and str(target).startswith(str((FRONTEND_DIR / "css").resolve())):
+        return FileResponse(str(target), media_type="text/css")
+    raise HTTPException(status_code=404, detail="Stylesheet not found")
+
+
+@app.get("/js/{file_path:path}")
+async def serve_js(file_path: str):
+    """Serves ES module JavaScript files directly for FastAPI serverless deployments."""
+    target = (FRONTEND_DIR / "js" / file_path).resolve()
+    if target.is_file() and str(target).startswith(str((FRONTEND_DIR / "js").resolve())):
+        return FileResponse(str(target), media_type="application/javascript")
+    raise HTTPException(status_code=404, detail="Script not found")
+
+
 if FRONTEND_DIR.exists():
-    css_dir = FRONTEND_DIR / "css"
-    js_dir = FRONTEND_DIR / "js"
-    if css_dir.exists():
-        app.mount("/css", StaticFiles(directory=str(css_dir)), name="css")
-    if js_dir.exists():
-        app.mount("/js", StaticFiles(directory=str(js_dir)), name="js")
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
     app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
 

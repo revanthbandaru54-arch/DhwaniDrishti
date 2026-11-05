@@ -796,3 +796,4 @@ export function evaluateStemSignClient(termId, studentSequence, measuredPalmAngl
         alignment_path_length: path.length,
     };
 }
+
