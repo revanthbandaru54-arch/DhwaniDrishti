@@ -7,3 +7,4 @@ Exposes the FastAPI `app` instance at the repository root for Vercel's FastAPI p
 from backend.main import app
 
 __all__ = ["app"]
+

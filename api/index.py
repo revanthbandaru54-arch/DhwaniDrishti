@@ -7,3 +7,4 @@ Exposes the FastAPI `app` instance under `/api` for Vercel Python serverless rou
 from backend.main import app
 
 __all__ = ["app"]
+

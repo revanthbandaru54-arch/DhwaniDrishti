@@ -568,6 +568,31 @@ class DhwaniDrishtiApp {
                 depContainer.appendChild(tag);
             });
 
+            // Render NIOS 230 Sentence Type, Word-Level Compounds & Sign Families
+            const niosContainer = document.getElementById("isl-nios-structures");
+            if (niosContainer) {
+                niosContainer.innerHTML = "";
+                if (data.sentence_type) {
+                    const st = document.createElement("div");
+                    st.className = "marker-item spatial";
+                    st.textContent = `Sentence Type: ${data.sentence_type}`;
+                    niosContainer.appendChild(st);
+                }
+                (data.word_level_structures || []).forEach((ws) => {
+                    const item = document.createElement("div");
+                    item.className = "marker-item nmm";
+                    const compoundStr = ws.isl_compound || (ws.components ? ws.components.join(" + ") : "");
+                    item.textContent = `${ws.gloss} = ${compoundStr} (${ws.rule})`;
+                    niosContainer.appendChild(item);
+                });
+                (data.sign_families || []).forEach((sf) => {
+                    const item = document.createElement("div");
+                    item.className = "marker-item spatial";
+                    item.textContent = `${sf.gloss}: ${sf.family}`;
+                    niosContainer.appendChild(item);
+                });
+            }
+
             // Render Spatial Markers & Non-Manual Markers
             const nmmContainer = document.getElementById("isl-nmm-output");
             nmmContainer.innerHTML = "";

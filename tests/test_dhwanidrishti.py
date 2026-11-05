@@ -106,6 +106,46 @@ class TestDhwaniDrishti(unittest.TestCase):
         )
         self.assertIn("PHOTOSYNTHESIS", parsed["isl_sov_gloss"])
 
+    def test_nios_230_sentence_types_and_clause_final_rules(self) -> None:
+        # Lesson 10.3: Negation ("NOT" at end of sentence + headshake NMM)
+        neg = self.grammar.parse_to_isl("I do not like sleeping late in the morning", "en-IN")
+        self.assertEqual(neg["isl_sov_gloss"][0], "MORNING")
+        self.assertEqual(neg["isl_sov_gloss"][-1], "NOT")
+        self.assertIn("Negation Sentence", neg["sentence_type"])
+        self.assertTrue(any("Head Shake" in m for m in neg["non_manual_markers"]))
+
+        # Lesson 10.3: Order / Command ("MUST" at end of sentence)
+        cmd = self.grammar.parse_to_isl("Students must sit in the class", "en-IN")
+        self.assertEqual(cmd["isl_sov_gloss"][-1], "MUST")
+        self.assertIn("Order / Command", cmd["sentence_type"])
+
+        # Lesson 10.3: Possessive Yes/No Interrogative ("HAVE" retained at end)
+        inter = self.grammar.parse_to_isl("Do you have a brother or sister?", "en-IN")
+        self.assertEqual(inter["isl_sov_gloss"][-1], "HAVE")
+        self.assertIn("Yes/No Question", inter["sentence_type"])
+        glosses_in_structures = [w["gloss"] for w in inter["word_level_structures"]]
+        self.assertIn("BROTHER", glosses_in_structures)
+        self.assertIn("SISTER", glosses_in_structures)
+
+    def test_nios_230_morphology_and_sign_families(self) -> None:
+        # Lesson 8, 9 & 11: Intensifier fusion, Fingerspelled + Sign compound, Neologism compound, Sign Family
+        res = self.grammar.parse_to_isl(
+            "In April students very happy remember evaporation in the library",
+            "en-IN",
+        )
+        # "VERY" is fused into NMM/movement rather than signed as a separate English word
+        self.assertNotIn("VERY", res["isl_sov_gloss"])
+        self.assertTrue(any("Intensified Facial Expression" in m for m in res["non_manual_markers"]))
+
+        struct_map = {w["gloss"]: w for w in res["word_level_structures"]}
+        self.assertEqual(struct_map["APRIL"]["isl_compound"], "A + HOT")
+        self.assertEqual(struct_map["LIBRARY"]["isl_compound"], "L + BOOK")
+        self.assertEqual(struct_map["EVAPORATION"]["isl_compound"], "WATER + SUN + RISE")
+
+        fam_map = {f["gloss"]: f["family"] for f in res["sign_families"]}
+        self.assertIn("Feeling Family", fam_map["HAPPY"])
+        self.assertIn("Thinking Family", fam_map["REMEMBER"])
+
 
 if __name__ == "__main__":
     unittest.main()
