@@ -1,0 +1,63 @@
+# ==============================================================================
+# DhwaniDrishti (.gitignore) — Python (FastAPI) + Node/npm + WebGL/WASM Stack
+# ==============================================================================
+
+# 1. Python Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+
+# 2. Python Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# 3. Node.js / Frontend Tooling
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+
+# 4. Build, Distribution & PyInstaller Packaging
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+*.spec
+*.exe
+*.msi
+
+# 5. Unit Test / Coverage Reports
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# 6. Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# 7. Logs & Local Databases
+*.log
+*.sqlite3
+*.db
+
+# 8. IDE & OS Metadata
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,27 @@
+{
+  "name": "dhwanidrishti",
+  "version": "2.4.0",
+  "description": "DhwaniDrishti — Real-time Bi-Directional Indian Sign Language (ISL) Translation & STEM Coach (NEP 2020)",
+  "main": "frontend/js/app.js",
+  "scripts": {
+    "start": "\".venv\\Scripts\\python.exe\" run_app.py || python run_app.py",
+    "dev": "\".venv\\Scripts\\python.exe\" -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload || python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload",
+    "build": "\".venv\\Scripts\\python.exe\" build_exe.py || python build_exe.py",
+    "build:exe": "\".venv\\Scripts\\python.exe\" build_exe.py || python build_exe.py",
+    "test": "\".venv\\Scripts\\python.exe\" -m unittest discover -s tests -v || python -m unittest discover -s tests -v",
+    "github:push": "\".venv\\Scripts\\python.exe\" push_to_github.py --repo DhwaniDrishti || python push_to_github.py --repo DhwaniDrishti"
+  },
+  "keywords": [
+    "indian-sign-language",
+    "isl",
+    "accessibility",
+    "stem-education",
+    "nep-2020",
+    "threejs",
+    "mediapipe",
+    "fastapi",
+    "dtw"
+  ],
+  "author": "DhwaniDrishti Contributors",
+  "license": "MIT"
+}

@@ -1,0 +1,1110 @@
+/* ==========================================================================
+   DhwaniDrishti — Minimal, Calm & Aspect-Ratio Responsive Design System
+   Inspired by Linear, Notion, Vercel, and Apple Accessibility Interfaces
+   ========================================================================== */
+
+:root {
+    /* Soft 3D Tactile Porcelain Base & Surfaces (matching reference screenshot) */
+    --bg-app: #eef2f7;
+    --bg-surface: #ffffff;
+    --bg-muted: #f4f7fb;
+    --bg-hover: #e8eef6;
+
+    /* Borders & Dividers */
+    --border-subtle: #e2e8f0;
+    --border-strong: #cbd5e1;
+
+    /* High-Contrast Typography (WCAG AAA / AA+) */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+
+    /* Restrained Deep Indigo-Blue Accent (matching reference screenshot) */
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-subtle: #eef2ff;
+    --accent-border: #c7d2fe;
+    --on-accent: #ffffff;
+
+    /* Semantic Status Colors */
+    --status-ok: #15803d;
+    --status-ok-bg: #f0fdf4;
+    --status-ok-border: #bbf7d0;
+    --status-warn: #b91c1c;
+    --status-warn-bg: #fef2f2;
+    --status-warn-border: #fecaca;
+
+    /* Typography System */
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    --text-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    --text-base: clamp(0.875rem, 0.85rem + 0.15vw, 0.9375rem);
+    --text-sm: 0.8125rem;
+
+    /* Fluid Spacing Scale */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: clamp(1rem, 1.5vw, 1.5rem);
+    --space-6: clamp(1.25rem, 2vw, 2rem);
+
+    /* Soft 3D Corner Radii */
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    /* 3D Tactile Depth Shadows (Extruded Cards, Floating Pills & Inset Wells) */
+    --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-3d-card: 10px 14px 30px rgba(15, 23, 42, 0.07), -6px -6px 18px rgba(255, 255, 255, 0.95), inset 0 1px 0 rgba(255, 255, 255, 1);
+    --shadow-3d-pill: 0 4px 10px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+    --shadow-3d-inset: inset 2px 2px 6px rgba(15, 23, 42, 0.05), inset -2px -2px 6px rgba(255, 255, 255, 0.9);
+    --shadow-popover: 0 14px 34px rgba(15, 23, 42, 0.12), 0 2px 8px rgba(15, 23, 42, 0.05);
+    --focus-ring: 0 0 0 2px #ffffff, 0 0 0 4px var(--accent);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* ==========================================================================
+   1. Ultra-Clean Minimalist Top Bar
+   Hamburger Menu (3 Lines) + App Name/Mode + Camera & Mic Toggles + Status
+   ========================================================================== */
+.app-header {
+    height: 54px;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0 var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+/* Three-Line Hamburger Menu Wrapper & Trigger */
+.menu-dropdown-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.icon-menu-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.icon-menu-btn:hover,
+.icon-menu-btn[aria-expanded="true"] {
+    background-color: var(--bg-muted);
+    border-color: var(--border-strong);
+}
+
+/* Floating Minimalist Workspace Modes Popover Menu */
+.workspace-menu-popover {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 270px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-popover);
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 100;
+}
+
+.workspace-menu-popover.hidden-menu {
+    display: none;
+}
+
+.menu-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    padding: 6px 10px 4px;
+}
+
+.mode-tab-btn {
+    width: 100%;
+    height: auto;
+    padding: 8px 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    text-align: left;
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.mode-tab-btn:hover {
+    background-color: var(--bg-muted);
+}
+
+.mode-item-name {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.mode-tab-sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.mode-tab-btn.active {
+    background-color: var(--accent-subtle);
+    border-color: var(--accent-border);
+}
+
+.mode-tab-btn.active .mode-item-name {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.mode-tab-btn.active .mode-tab-sub {
+    color: var(--accent);
+    opacity: 0.85;
+}
+
+.menu-footer-metrics {
+    margin-top: 4px;
+    padding: 8px 10px 4px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.app-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+.header-divider {
+    color: var(--border-strong);
+}
+
+.current-mode-label {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Header Right: Camera & Mic Enable/Disable Buttons + Status */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-shrink: 0;
+}
+
+.device-toggle-btn {
+    height: 34px;
+    padding: 0 12px;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.12s ease;
+}
+
+.device-toggle-btn:hover {
+    background-color: var(--bg-muted);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+}
+
+.device-toggle-btn.active {
+    background-color: var(--status-ok-bg);
+    border-color: var(--status-ok-border);
+    color: var(--status-ok);
+    font-weight: 600;
+}
+
+.device-toggle-btn.mic-recording {
+    background-color: var(--status-warn-bg);
+    border-color: var(--status-warn-border);
+    color: var(--status-warn);
+    font-weight: 600;
+}
+
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    padding: 0 6px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--text-muted);
+    display: inline-block;
+}
+
+.status-indicator.status-online .status-dot {
+    background-color: var(--status-ok);
+}
+
+.xp-compact {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text-secondary);
+    background-color: var(--bg-muted);
+    border: 1px solid var(--border-subtle);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   2. Centered Top-to-Bottom Main Workspace
+   Live Spatial Viewfinders scaled to 175% at top (with left/right margin)
+   + Active Module (LectureCast / DoubtDesk / STEM Coach) directly below
+     with reduced side borders while preserving clean breathing room
+   ========================================================================== */
+.workspace-main {
+    width: 100%;
+    max-width: 1640px;
+    margin: 0 auto;
+    padding: var(--space-5) clamp(1rem, 2.5vw, 2.25rem);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+}
+
+/* Scale Live Spatial Viewfinders to 175% (~1470px width & ~420px viewport height) */
+.visual-stage-section {
+    width: 100%;
+    max-width: 1470px;
+    margin: 0 auto;
+}
+
+/* Decrease left/right border space for LectureCast & active modules while leaving clean margins */
+.active-module-column {
+    width: 100%;
+    max-width: 1470px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    min-width: 0;
+}
+
+/* When Mode 4 ("Live Spatial Viewfinders") is selected, expand viewfinders further */
+.workspace-main[data-active-mode="viewfinders"] .visual-stage-section {
+    max-width: 1560px;
+}
+
+.workspace-main[data-active-mode="viewfinders"] .active-module-column {
+    display: none;
+}
+
+/* Grouped Section Container with 3D Tactile Depth */
+.module-section {
+    background: linear-gradient(155deg, #ffffff 0%, #f7f9fc 100%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-3d-card);
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    min-width: 0;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.section-header h2 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+.section-subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   3. 175%-Scaled Two-Column Webcam & 3D Avatar Viewports
+   ========================================================================== */
+.dual-viewport-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.viewport-frame {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.viewport-label-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.viewport-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    max-height: clamp(300px, 46dvh, 420px);
+    background-color: var(--bg-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-3d-inset);
+    overflow: hidden;
+}
+
+.workspace-main[data-active-mode="viewfinders"] .viewport-box {
+    aspect-ratio: 16 / 10;
+    max-height: clamp(360px, 64dvh, 580px);
+}
+
+/* Persona Switcher Pills & Floating 3D Rig Telemetry Pills (matching screenshot) */
+.persona-pill-group {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--bg-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 2px;
+    box-shadow: var(--shadow-3d-inset);
+}
+
+.persona-btn {
+    height: 24px;
+    padding: 0 9px;
+    font-size: 11px;
+    font-weight: 500;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-secondary);
+}
+
+.persona-btn.active {
+    background-color: var(--bg-surface);
+    color: var(--accent);
+    font-weight: 600;
+    box-shadow: var(--shadow-sm);
+}
+
+.rig-telemetry-stack {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 12;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    pointer-events: none;
+}
+
+.rig-pill-top,
+.rig-pill-angles {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow-3d-pill);
+    border-radius: 10px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+}
+
+.rig-pill-top strong {
+    color: var(--text-primary);
+}
+
+.rig-pill-angles strong {
+    color: var(--accent);
+}
+
+.rig-divider {
+    color: var(--border-strong);
+}
+
+.rig-pill-topright {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 12;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 5px;
+    pointer-events: none;
+}
+
+.signing-space-tag {
+    background: rgba(238, 242, 255, 0.94);
+    border: 1px solid var(--accent-border);
+    box-shadow: var(--shadow-3d-pill);
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 8px;
+}
+
+.fps-stable-tag {
+    background: rgba(240, 253, 244, 0.94);
+    border: 1px solid var(--status-ok-border);
+    box-shadow: var(--shadow-3d-pill);
+    color: var(--status-ok);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+/* Interactive 3D Hand Signals Strip */
+.hand-signals-strip {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 4px;
+}
+
+.hand-signals-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-right: 2px;
+}
+
+.hand-signal-btn {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 9px;
+    background: linear-gradient(145deg, #ffffff, #f3f6fb);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-3d-pill);
+    color: var(--text-primary);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.hand-signal-btn:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent-border);
+}
+
+.hand-signal-btn.active {
+    background: var(--accent-subtle);
+    border-color: var(--accent-border);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+#holistic-canvas,
+#avatar-viewport canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+}
+
+.camera-disabled-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    background-color: var(--bg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: var(--text-base);
+    font-weight: 500;
+}
+
+.viewport-overlay-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.94);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   4. Controls: Inputs, Selects, Buttons
+   ========================================================================== */
+.control-row {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+input[type="text"],
+select {
+    height: 38px;
+    padding: 0 12px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    transition: border-color 0.12s ease;
+}
+
+input[type="text"].transcription-input {
+    flex: 1;
+    min-width: 200px;
+}
+
+input[type="text"]::placeholder {
+    color: var(--text-muted);
+}
+
+input[type="text"]:hover,
+select:hover {
+    border-color: var(--border-strong);
+}
+
+input[type="text"]:focus-visible,
+select:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+input[type="checkbox"]:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+button {
+    height: 38px;
+    padding: 0 14px;
+    background: linear-gradient(155deg, #ffffff 0%, #f4f7fb 100%);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-3d-pill);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+button:hover {
+    background: var(--bg-muted);
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+}
+
+button:active {
+    background: var(--bg-hover);
+    transform: translateY(0);
+    box-shadow: var(--shadow-3d-inset);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button.btn-primary {
+    background: linear-gradient(145deg, #5b52f0 0%, #4338ca 100%);
+    color: var(--on-accent);
+    border-color: #4338ca;
+    box-shadow: 0 6px 14px rgba(79, 70, 229, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+button.btn-primary:hover {
+    background: linear-gradient(145deg, #4f46e5 0%, #3730a3 100%);
+    border-color: #3730a3;
+}
+
+button.recording-active {
+    background: var(--status-warn);
+    color: #ffffff;
+    border-color: var(--status-warn);
+}
+
+/* ==========================================================================
+   5. Primary Output Surfaces & Accessible Classroom Text
+   ========================================================================== */
+.primary-output-group {
+    background-color: var(--bg-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-3d-inset);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.field-label {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.classroom-readable-text {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--text-primary);
+}
+
+/* ISL Gloss Sequence Stream */
+.gloss-stream {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    min-height: 32px;
+    align-items: center;
+}
+
+.gloss-pill {
+    background: linear-gradient(155deg, #ffffff 0%, #f4f7fb 100%);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-3d-pill);
+    color: var(--text-primary);
+    font-size: var(--text-base);
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: var(--radius-sm);
+}
+
+.gloss-pill.active-signing,
+.gloss-pill.locus-pill {
+    background-color: var(--accent-subtle);
+    border-color: var(--accent-border);
+    color: var(--accent);
+}
+
+/* ==========================================================================
+   6. STEM Coach Score Header & Feedback
+   ========================================================================== */
+.score-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.score-primary-value {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.progress-track {
+    width: 100%;
+    height: 8px;
+    background-color: var(--border-subtle);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 100%;
+    background-color: var(--accent);
+    transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.coach-hint-card {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+}
+
+.coach-hint-card:last-child {
+    margin-bottom: 0;
+}
+
+.coach-hint-card.pass {
+    background-color: var(--status-ok-bg);
+    border: 1px solid var(--status-ok-border);
+    color: var(--status-ok);
+}
+
+.coach-hint-card.warn {
+    background-color: var(--status-warn-bg);
+    border: 1px solid var(--status-warn-border);
+    color: var(--status-warn);
+}
+
+/* ==========================================================================
+   7. Collapsible "Advanced" & Secondary Disclosures
+   ========================================================================== */
+details.advanced-disclosure {
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-3);
+}
+
+details.advanced-disclosure summary {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+    user-select: none;
+}
+
+details.advanced-disclosure summary::-webkit-details-marker {
+    display: none;
+}
+
+details.advanced-disclosure summary::before {
+    content: "▸";
+    font-size: 12px;
+    transition: transform 0.15s ease;
+}
+
+details.advanced-disclosure[open] summary::before {
+    transform: rotate(90deg);
+}
+
+details.advanced-disclosure summary:hover {
+    color: var(--text-primary);
+}
+
+.disclosure-body {
+    margin-top: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--bg-muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.preset-strip {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.preset-sentence-btn,
+.doubt-demo-btn {
+    height: 32px;
+    padding: 0 10px;
+    font-size: var(--text-sm);
+    background-color: var(--bg-surface);
+    color: var(--text-secondary);
+}
+
+.token-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--text-sm);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    margin-right: 6px;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+}
+
+.token-chip small {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.marker-item {
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    padding: 3px 0;
+}
+
+.trilingual-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+}
+
+.lang-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+}
+
+.lang-card h4 {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.lang-card p {
+    font-size: var(--text-base);
+    color: var(--text-primary);
+}
+
+.metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+}
+
+.metric-tile {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: var(--space-3);
+}
+
+.metric-tile .val {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.metric-tile .lbl {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.joint-badge-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.joint-badge {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.joint-badge.green {
+    background-color: var(--status-ok-bg);
+    border: 1px solid var(--status-ok-border);
+    color: var(--status-ok);
+}
+
+.joint-badge.red {
+    background-color: var(--status-warn-bg);
+    border: 1px solid var(--status-warn-border);
+    color: var(--status-warn);
+}
+
+.checkbox-row {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+}
+
+.hidden-pillar {
+    display: none !important;
+}
+
+/* ==========================================================================
+   8. Device Browser Aspect-Ratio & Orientation Responsiveness
+   ========================================================================== */
+
+/* Widescreen & Ultrawide Aspect Ratios (16:10, 16:9, 21:9):
+   Maintain 175% top viewfinders & wide LectureCast with subtle side margins */
+@media (min-aspect-ratio: 4/3) and (min-width: 1024px) {
+    .visual-stage-section {
+        max-width: 1470px;
+    }
+
+    .active-module-column {
+        max-width: 1470px;
+    }
+
+    .viewport-box {
+        max-height: clamp(300px, 46dvh, 420px);
+    }
+}
+
+/* Compact / Short-Height Landscape Aspect Ratios (e.g. 1366x768 laptops or landscape tablets) */
+@media (orientation: landscape) and (max-height: 760px) {
+    .app-header {
+        height: 46px;
+    }
+
+    .workspace-main {
+        padding: var(--space-3) clamp(1rem, 2.5vw, 2rem);
+        gap: var(--space-3);
+    }
+
+    .module-section {
+        padding: var(--space-3) var(--space-4);
+        gap: var(--space-2);
+    }
+
+    .viewport-box {
+        max-height: clamp(235px, 38dvh, 330px);
+    }
+}
+
+/* Square & Portrait Tablet Aspect Ratios (4:3, 3:4, iPad / Surface / Split-Screen Browser) */
+@media (max-aspect-ratio: 4/3), (max-width: 1023px) {
+    .workspace-main {
+        padding: var(--space-4) clamp(1rem, 4vw, 2.5rem);
+    }
+
+    .trilingual-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tall Mobile Portrait Aspect Ratios (9:16, 9:20 smartphones & narrow browser windows) */
+@media (max-aspect-ratio: 3/4) and (max-width: 680px), (max-width: 640px) {
+    .app-header {
+        padding: 0 var(--space-3);
+    }
+
+    .current-mode-label,
+    .header-divider,
+    .xp-compact {
+        display: none;
+    }
+
+    .workspace-main {
+        padding: var(--space-3);
+        gap: var(--space-3);
+    }
+
+    .module-section {
+        padding: var(--space-3);
+    }
+
+    .dual-viewport-grid,
+    .metrics-row {
+        grid-template-columns: 1fr;
+    }
+
+    .viewport-box {
+        aspect-ratio: 16 / 10;
+        max-height: 200px;
+    }
+
+    .control-row > input[type="text"].transcription-input,
+    .control-row > select,
+    .control-row > button {
+        width: 100%;
+    }
+}
